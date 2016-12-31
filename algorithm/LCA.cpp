@@ -18,8 +18,10 @@ void dfs(int u, int p){
 	}
 }
 void lca_table(){
-	for(int i=0;i<n;i++){
-		for(int j=1;j<lg;j++){
+	memset(P,-1,sizeof P);
+	dfs(0,-1);
+	for(int j=1;j<lg;j++){
+		for(int i=0;i<n;i++){
 			if(P[i][j-1] == -1) P[i][j] = -1;
 			else P[i][j] = P[P[i][j-1]][j-1];
 		}
@@ -50,26 +52,11 @@ int main(){
 		u--; v--;
 		e[u].pb(v); e[v].pb(u);
 	}
-	dfs(0,-1);
 	lca_table();
 	int m; cin >> m;
 	while(m--){
 		int u,v; cin >> u >> v;
 		u--; v--;
-		if(D[u] > D[v]) swap(u,v);
-		int l = lca(u,v), d;
-		if(l == u) d = D[v] - D[u];
-		else d = D[v] + D[u] - 2*D[l];
-		if(d&1) cout << 0 << "\n";
-		else if(d == 0) cout << n << "\n";
-		else{
-			int mid = parent(v,d/2), vv = parent(v,d/2-1);
-			int cnt = S[mid]-S[vv];
-			if(mid == l){
-				int uu = parent(u,d/2-1);
-				cnt = n -S[uu] - S[vv];
-			}
-			cout << cnt << "\n";
-		}
+		int l = lca(u,v);
 	}
 }
